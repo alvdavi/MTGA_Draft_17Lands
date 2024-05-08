@@ -172,8 +172,7 @@ class ArenaScanner:
         try:
             draft_id = event_data["id"]
             request_data = json.loads(event_data["request"])
-            payload_data = json.loads(request_data["Payload"])
-            event_name = payload_data["EventName"]
+            event_name = request_data["EventName"]
 
             logger.info("Event found %s", event_name)
 
@@ -277,19 +276,17 @@ class ArenaScanner:
                         self.draft_log.info(line)
                         draft_data = json.loads(line[start_offset:])
                         request_data = draft_data["request"]
-                        payload_data = json.loads(request_data)["Payload"]
 
                         pack_cards = []
                         try:
 
-                            card_data = json.loads(payload_data)
-                            cards = card_data["CardsInPack"]
+                            cards = request_data["CardsInPack"]
 
                             for card in cards:
                                 pack_cards.append(str(card))
 
-                            pack = card_data["PackNumber"]
-                            pick = card_data["PickNumber"]
+                            pack = request_data["PackNumber"]
+                            pick = request_data["PickNumber"]
 
                             pack_index = (pick - 1) % 8
 
@@ -347,11 +344,10 @@ class ArenaScanner:
                             draft_data = json.loads(line[start_offset:])
 
                             request_data = json.loads(draft_data["request"])
-                            param_data = json.loads(request_data["Payload"])
 
-                            pack = int(param_data["Pack"])
-                            pick = int(param_data["Pick"])
-                            card = str(param_data["GrpId"])
+                            pack = int(request_data["Pack"])
+                            pick = int(request_data["Pick"])
+                            card = str(request_data["GrpId"])
 
                             pack_index = (pick - 1) % 8
 
